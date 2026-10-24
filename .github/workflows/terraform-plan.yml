@@ -46,7 +46,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.AWS_PLAN_ROLE_ARN }}
           role-session-name: gha-plan-${{ github.run_id }}
