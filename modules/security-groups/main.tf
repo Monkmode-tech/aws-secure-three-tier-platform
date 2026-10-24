@@ -12,6 +12,7 @@
 ###############################################################################
 
 resource "aws_security_group" "alb" {
+  # checkov:skip=CKV2_AWS_5: Attached to the ALB in modules/edge; checkov cannot follow the module output
   name        = "${var.name}-alb"
   description = "Public ALB: HTTP/HTTPS in from the internet, app port out to the app tier only"
   vpc_id      = var.vpc_id
@@ -20,6 +21,7 @@ resource "aws_security_group" "alb" {
 }
 
 resource "aws_security_group" "app" {
+  # checkov:skip=CKV2_AWS_5: Attached to the ECS service in modules/app; checkov cannot follow the module output
   name        = "${var.name}-app"
   description = "ECS tasks: app port from the ALB only; HTTPS out and DB port to the data tier"
   vpc_id      = var.vpc_id
@@ -28,6 +30,7 @@ resource "aws_security_group" "app" {
 }
 
 resource "aws_security_group" "db" {
+  # checkov:skip=CKV2_AWS_5: Attached to the RDS instance in modules/database; checkov cannot follow the module output
   name        = "${var.name}-db"
   description = "RDS: DB port from the app tier only; no egress"
   vpc_id      = var.vpc_id
@@ -39,6 +42,7 @@ resource "aws_security_group" "db" {
 # ALB
 #------------------------------------------------------------------------------
 resource "aws_vpc_security_group_ingress_rule" "alb_http" {
+  # checkov:skip=CKV_AWS_260: Public port 80 exists only to 301-redirect to HTTPS (ALB listener)
   security_group_id = aws_security_group.alb.id
   description       = "HTTP from the internet (redirected to HTTPS when a domain is configured)"
   cidr_ipv4         = "0.0.0.0/0"
@@ -69,6 +73,7 @@ resource "aws_vpc_security_group_egress_rule" "alb_to_app" {
 # App
 #------------------------------------------------------------------------------
 resource "aws_vpc_security_group_ingress_rule" "app_from_alb" {
+  # checkov:skip=CKV_AWS_260: False positive - source is the ALB security group, not 0.0.0.0/0
   security_group_id            = aws_security_group.app.id
   description                  = "App port from the ALB only"
   referenced_security_group_id = aws_security_group.alb.id

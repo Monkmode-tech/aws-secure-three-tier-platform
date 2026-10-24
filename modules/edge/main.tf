@@ -155,6 +155,7 @@ resource "aws_s3_bucket_policy" "alb_logs" {
 # Application Load Balancer
 #------------------------------------------------------------------------------
 resource "aws_lb" "this" {
+  # checkov:skip=CKV2_AWS_76: Log4j coverage comes from AWSManagedRulesKnownBadInputsRuleSet (priority 30), defined in a dynamic block checkov does not expand
   name                       = "${var.name}-alb"
   load_balancer_type         = "application"
   internal                   = false
@@ -263,6 +264,7 @@ resource "aws_route53_record" "app" {
 # Listeners
 #------------------------------------------------------------------------------
 resource "aws_lb_listener" "http" {
+  # checkov:skip=CKV_AWS_2: HTTP listener only redirects to HTTPS when a domain is set; plain HTTP is the documented no-domain demo mode
   load_balancer_arn = aws_lb.this.arn
   port              = 80
   protocol          = "HTTP"

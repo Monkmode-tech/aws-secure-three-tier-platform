@@ -15,6 +15,7 @@
 data "aws_caller_identity" "current" {}
 
 data "aws_availability_zones" "available" {
+  # checkov:skip=CKV_AWS_394: AZ list is sliced to az_count; new AZs sort after existing ones, so the selection is stable
   state = "available"
 
   filter {

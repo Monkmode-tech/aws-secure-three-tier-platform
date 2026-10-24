@@ -21,8 +21,8 @@ jobs:
     name: terraform fmt
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
+      - uses: actions/checkout@v7
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "~1.13"
       - run: terraform fmt -check -recursive -diff
@@ -38,8 +38,8 @@ jobs:
       run:
         working-directory: ${{ matrix.root }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
+      - uses: actions/checkout@v7
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "~1.13"
       - run: terraform init -backend=false -input=false
@@ -49,8 +49,8 @@ jobs:
     name: tflint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: terraform-linters/setup-tflint@v4
+      - uses: actions/checkout@v7
+      - uses: terraform-linters/setup-tflint@v6
       - run: tflint --init
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -60,7 +60,7 @@ jobs:
     name: checkov (IaC security scan)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: bridgecrewio/checkov-action@v12
         with:
           directory: .
@@ -71,5 +71,5 @@ jobs:
     name: shellcheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: shellcheck scripts/*.sh

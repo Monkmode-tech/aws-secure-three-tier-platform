@@ -87,6 +87,7 @@ resource "random_id" "final_snapshot" {
 }
 
 resource "aws_db_instance" "this" {
+  # checkov:skip=CKV2_AWS_69: TLS to RDS is an accepted lab risk (private subnets only); tracked in docs/security-controls.md
   identifier     = local.identifier
   engine         = "mariadb"
   engine_version = var.engine_version
