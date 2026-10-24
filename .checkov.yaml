@@ -1,0 +1,35 @@
+# Checkov configuration.
+#
+# Every skipped check below is an accepted, documented risk for a portfolio /
+# lab environment. Each one says why, and docs/security-controls.md tracks
+# what would change for production.
+compact: true
+quiet: true
+framework:
+  - terraform
+skip-path:
+  - .terraform
+skip-check:
+  # --- Accepted for a short-lived lab (variables flip these for production) ---
+  - CKV_AWS_150   # ALB deletion protection: var.deletion_protection, false so `terraform destroy` works
+  - CKV_AWS_293   # RDS deletion protection: same variable
+  - CKV_AWS_338   # Log retention >= 1 year: 30 days keeps CloudWatch cost inside the $50 budget
+  - CKV_AWS_353   # RDS Performance Insights: not needed at db.t4g.micro scale; Enhanced Monitoring is on
+
+  # --- Not applicable to this design ---
+  - CKV_AWS_161   # RDS IAM auth: WordPress cannot use IAM tokens; password is RDS-managed in Secrets Manager
+  - CKV_AWS_336   # ECS read-only root FS: WordPress writes to its document root at runtime
+  - CKV2_AWS_57   # Secret rotation: RDS rotates its managed secret itself; WP salts are rotated by re-apply
+  - CKV_AWS_378   # ALB->target HTTP: TLS terminates at the ALB; the hop stays inside private subnets
+  - CKV_TF_3      # State locking: configured in backend.hcl (use_lockfile = true), not in code
+
+  # --- Log/state buckets (they are the logging destination themselves) ---
+  - CKV_AWS_18    # S3 access logging on the log bucket would be recursive
+  - CKV_AWS_144   # Cross-region replication: not required for logs/state in a lab
+  - CKV2_AWS_62   # S3 event notifications: nothing consumes them
+  - CKV_AWS_145   # SSE-KMS on the ALB log bucket: ALB log delivery only supports SSE-S3
+
+  # --- KMS key policy uses "*" for the key itself (resource policies) ---
+  - CKV_AWS_109
+  - CKV_AWS_111
+  - CKV_AWS_356

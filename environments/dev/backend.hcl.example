@@ -1,0 +1,7 @@
+# Copy to backend.hcl (git-ignored) after running bootstrap/, then:
+#   terraform init -backend-config=backend.hcl
+bucket       = "tfstate-<ACCOUNT_ID>-us-east-2"
+key          = "aws-secure-three-tier-platform/dev/terraform.tfstate"
+region       = "us-east-2"
+encrypt      = true
+use_lockfile = true
