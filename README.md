@@ -204,7 +204,7 @@ and the init / plan / apply workflow.
 
 ## Background
 
-Built by **Caleb Tetteh** (M.S. Cloud Computing Systems, UMGC; B.S. Computer
+Built by **Caleb Tetteh** (M.S. Cloud Computing, UMGC; B.S. Computer
 Science, Georgia Tech) as part of a cloud engineering portfolio. The original
 lab and capstone (CLCS 645) provided the WordPress-on-ECS starting point and the
 autoscaling and load-test approach; everything here was redesigned and rewritten.
